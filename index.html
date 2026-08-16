@@ -1,18 +1,22 @@
+﻿        <!-- ========== PARA ATUALIZAR VERSÃO ========== -->
+			<!-- powershell -ExecutionPolicy Bypass -File .\atualizar-versao.ps1 -->
+
+
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quiz Master - Países e Capitais</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Quiz Master - PaÃ­ses e Capitais</title>
+    <link rel="stylesheet" href="style.css?v=v20260816211316" />
 </head>
 <body>
 
     <div class="app-container" id="app">
 
-        <!-- ========== ECRÃ INICIAL ========== -->
+        <!-- ========== ECRÃƒ INICIAL ========== -->
         <div id="startScreen">
-            <div class="logo" style="font-size:2.5rem; margin-bottom:40px;">Quiz Master - Países e Capitais</div>
+            <div class="logo" style="font-size:2.5rem; margin-bottom:40px;">Quiz Master - PaÃ­ses e Capitais</div>
             <p style="color:#94a3b8; margin-bottom:30px; font-size:0.95rem;">
                 Selecione um jogador da lista ou crie um novo.
             </p>
@@ -25,7 +29,7 @@
             </div>
         </div>
 
-        <!-- ========== ECRÃ DE JOGO ========== -->
+        <!-- ========== ECRÃƒ DE JOGO ========== -->
         <div id="gameScreen" style="display:none;">
 
             <div class="top-bar">
@@ -36,20 +40,20 @@
                 <div id="gameTitle" style="margin-top:12px; font-size:1.5rem; font-weight:700; color:#f0f0ff; text-align:center;"></div>
             </div>
 
-            <div class="hint-box" id="hintDisplay">—</div>
+            <div class="hint-box" id="hintDisplay">â€”</div>
 
             <div class="word-display" id="wordDisplay"></div>
 
             <div class="keyboard" id="keyboard"></div>
 
             <div class="action-area">
-                <button class="btn btn-warning" id="hintBtn">🔍 Dica</button>
-                <button class="btn btn-danger" id="resetBtn" disabled>🔄 Nova Palavra</button>
+                <button class="btn btn-warning" id="hintBtn">ðŸ” Dica</button>
+                <button class="btn btn-danger" id="resetBtn" disabled>ðŸ”„ Nova Palavra</button>
             </div>
 
             <div style="margin-top:16px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
-                    <span style="color:#94a3b8; font-size:0.9rem;">✅ Progresso</span>
+                    <span style="color:#94a3b8; font-size:0.9rem;">âœ… Progresso</span>
                     <span style="color:#94a3b8; font-size:0.9rem;" id="progressDisplay">0/0</span>
                 </div>
                 <div style="width:100%; height:8px; background:rgba(255,255,255,0.1); border-radius:20px; overflow:hidden; margin-top:4px;">
@@ -58,23 +62,23 @@
             </div>
         </div>
 
-        <!-- ========== ECRÃ DE JOGO COMPLETO ========== -->
+        <!-- ========== ECRÃƒ DE JOGO COMPLETO ========== -->
         <div id="completeScreen" style="display:none; padding:40px 0;">
-            <div style="font-size:4rem; margin-bottom:20px;">🎉</div>
-            <div class="logo" style="font-size:2rem; margin-bottom:10px;">Parabéns!</div>
-            <p style="color:#94a3b8; font-size:1.2rem;">Completaste todas as perguntas disponíveis!</p>
-            <p style="color:#94a3b8; margin:10px 0 20px;">Podes recomeçar o teu progresso.</p>
-            <button class="btn btn-primary" id="resetProgressBtn">🔄 Recomeçar Progresso</button>
+            <div style="font-size:4rem; margin-bottom:20px;">ðŸŽ‰</div>
+            <div class="logo" style="font-size:2rem; margin-bottom:10px;">ParabÃ©ns!</div>
+            <p style="color:#94a3b8; font-size:1.2rem;">Completaste todas as perguntas disponÃ­veis!</p>
+            <p style="color:#94a3b8; margin:10px 0 20px;">Podes recomeÃ§ar o teu progresso.</p>
+            <button class="btn btn-primary" id="resetProgressBtn">ðŸ”„ RecomeÃ§ar Progresso</button>
             <button class="btn btn-secondary" id="logoutCompleteBtn" style="margin-left:12px;">Sair</button>
         </div>
 
     </div>
 
-    <!-- ===== CARREGAR FIREBASE (versão compat) ===== -->
+    <!-- ===== CARREGAR FIREBASE (versÃ£o compat) ===== -->
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 
-    <!-- ===== CONFIGURAR FIREBASE (sintaxe clássica, sem módulos) ===== -->
+    <!-- ===== CONFIGURAR FIREBASE (sintaxe clÃ¡ssica, sem mÃ³dulos) ===== -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyC94sFeisdAFBAivTyLdMNqCz3BU6qsM3o",
@@ -86,17 +90,17 @@
             measurementId: "G-GNQN6YNG4K"
         };
 
-        // Inicializar o Firebase (não uses módulos)
+        // Inicializar o Firebase (nÃ£o uses mÃ³dulos)
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // (Opcional) Se quiseres analytics, podes adicionar, mas não é necessário para o jogo.
+        // (Opcional) Se quiseres analytics, podes adicionar, mas nÃ£o Ã© necessÃ¡rio para o jogo.
         // const analytics = firebase.analytics();
     </script>
 
     <!-- ===== CARREGAR O TEU JOGO ===== -->
-    <script src="paises.js"></script>
-    <script src="script.js"></script>
+    <script src="paises.js?v=v20260816211316"></script>
+    <script src="script.js?v=v20260816211316"></script>
 
 </body>
 </html>
