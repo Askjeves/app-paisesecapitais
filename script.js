@@ -1,11 +1,23 @@
 // ================================================================
-// BANCO DE PERGUNTAS
+// NÍVEIS
 // ================================================================
-function gerarPerguntas() {
+let nivelAtual = 'basico'; // 'basico', 'intermedio', 'avancado'
+
+// Por enquanto, todos os níveis usam o mesmo conjunto de países
+function getPaisesPorNivel(nivel) {
+    return PAISES;
+}
+
+// ================================================================
+// BANCO DE PERGUNTAS (com prefixo por nível)
+// ================================================================
+function gerarPerguntas(nivel) {
+    const paises = getPaisesPorNivel(nivel);
     const perguntas = [];
-    PAISES.forEach(p => {
+    paises.forEach(p => {
+        const prefix = nivel + ':';
         perguntas.push({
-            id: `pais:${p.pais}`,
+            id: `${prefix}pais:${p.pais}`,
             tipo: 'pais',
             paisObj: p,
             palavraAlvo: p.pais,
@@ -13,7 +25,7 @@ function gerarPerguntas() {
             opcoesTipo: 'pais'
         });
         perguntas.push({
-            id: `capital:${p.pais}`,
+            id: `${prefix}capital:${p.pais}`,
             tipo: 'capital',
             paisObj: p,
             palavraAlvo: p.capital,
@@ -21,37 +33,31 @@ function gerarPerguntas() {
             opcoesTipo: 'capital'
         });
     });
-    console.log('✅ Perguntas geradas:', perguntas.length);
+    console.log(`✅ Perguntas geradas para nível ${nivel}:`, perguntas.length);
     return perguntas;
 }
 
 // ================================================================
-// GERAR 4 OPÇÕES (TODAS DO MESMO CONTINENTE)
+// GERAR 4 OPÇÕES (TODAS DO MESMO CONTINENTE, DENTRO DO NÍVEL)
 // ================================================================
 function gerarOpcoes(pergunta, paisObj) {
-    const tipo = pergunta.opcoesTipo; // 'pais' ou 'capital'
+    const tipo = pergunta.opcoesTipo;
     const continente = paisObj.continente;
     const correta = tipo === 'pais' ? paisObj.pais : paisObj.capital;
 
-    // Filtrar todos os países do mesmo continente
-    const mesmosContinentes = PAISES.filter(p => p.continente === continente);
-    // Extrair os valores (nomes de países ou capitais) do mesmo continente
+    const paisesNivel = getPaisesPorNivel(nivelAtual);
+    const mesmosContinentes = paisesNivel.filter(p => p.continente === continente);
     const valores = mesmosContinentes.map(p => tipo === 'pais' ? p.pais : p.capital);
-    // Remover a opção correta
     const outras = valores.filter(v => v !== correta);
 
-    // Se houver menos de 3 distratores, preencher com países de outros continentes (fallback)
     let distratores = outras.sort(() => Math.random() - 0.5).slice(0, 3);
     if (distratores.length < 3) {
-        // Fallback: buscar distratores de qualquer continente
-        const todosValores = PAISES.map(p => tipo === 'pais' ? p.pais : p.capital);
+        const todosValores = paisesNivel.map(p => tipo === 'pais' ? p.pais : p.capital);
         const outrasGlobais = todosValores.filter(v => v !== correta && !distratores.includes(v));
         const extra = outrasGlobais.sort(() => Math.random() - 0.5).slice(0, 3 - distratores.length);
         distratores = [...distratores, ...extra];
     }
-
     const opcoes = [correta, ...distratores];
-    // Embaralhar as 4
     return opcoes.sort(() => Math.random() - 0.5);
 }
 
@@ -132,7 +138,7 @@ let state = {
 };
 
 let jogadorAtual = null;
-let todasPerguntas = gerarPerguntas();
+let todasPerguntas = gerarPerguntas(nivelAtual);
 
 // ================================================================
 // AUXILIARES
@@ -150,10 +156,30 @@ function progressoAtual() {
 }
 
 // ================================================================
+// MUDAR NÍVEL
+// ================================================================
+function mudarNivel(nivel) {
+    if (nivel === nivelAtual) return;
+    nivelAtual = nivel;
+
+    document.querySelectorAll('.level-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.level === nivel);
+    });
+
+    todasPerguntas = gerarPerguntas(nivel);
+    if (jogadorAtual) {
+        iniciarPergunta();
+    }
+    renderizarListaJogadores();
+}
+
+// ================================================================
 // TEMPORIZADOR
 // ================================================================
 function iniciarTemporizador() {
     if (state.timerInterval) clearInterval(state.timerInterval);
+    // O tempo só conta para níveis diferentes do básico
+    // No básico, o temporizador corre apenas para exibição (não bloqueia)
     state.tempoRestante = 60;
     state.tempoExpirado = false;
     state.timerInterval = setInterval(() => {
@@ -210,7 +236,6 @@ function iniciarPergunta() {
         return;
     }
 
-    // ===== LIMPEZA TOTAL DE TODOS OS BOTÕES =====
     document.querySelectorAll('.option-btn').forEach(btn => {
         btn.className = 'option-btn';
         btn.style.removeProperty('opacity');
@@ -325,7 +350,15 @@ async function selecionarOpcao(valor, btn) {
         }
     });
 
-    const concluida = correta && !state.usouDica && !state.cometeuErro && !state.tempoExpirado;
+    // ===== REGRAS DE CONCLUSÃO POR NÍVEL =====
+    let concluida;
+    if (nivelAtual === 'basico') {
+        // No básico: basta acertar, independentemente de dicas ou tempo
+        concluida = correta && !state.cometeuErro;
+    } else {
+        // Intermédio e Avançado: sem dicas, sem erros e dentro do tempo
+        concluida = correta && !state.usouDica && !state.cometeuErro && !state.tempoExpirado;
+    }
 
     if (concluida && jogadorAtual && state.perguntaAtual) {
         jogadorAtual.perguntasConcluidas.push(state.perguntaAtual.id);
@@ -458,6 +491,18 @@ logoutCompleteBtn.addEventListener('click', sair);
 resetProgressBtn.addEventListener('click', reiniciarProgresso);
 hintBtn.addEventListener('click', usarDica);
 resetBtn.addEventListener('click', iniciarPergunta);
+
+// ================================================================
+// EVENTOS DOS BOTÕES DE NÍVEL
+// ================================================================
+document.querySelectorAll('.level-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const nivel = btn.dataset.level;
+        if (nivel !== nivelAtual) {
+            mudarNivel(nivel);
+        }
+    });
+});
 
 // ================================================================
 // INICIALIZAR

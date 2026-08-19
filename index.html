@@ -3,19 +3,34 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quiz Master - PaÃ­ses e Capitais</title>
-    <link rel="stylesheet" href="style.css?v=v20260819151632" />
+    <title>Quiz Master - Países e Capitais</title>
+    <link rel="stylesheet" href="style.css?v=1" />
 </head>
 <body>
 
     <div class="app-container" id="app">
 
-        <!-- ========== ECRÃƒ INICIAL ========== -->
+
+        <!-- ========== ECRÃ INICIAL ========== -->
         <div id="startScreen">
-            <div class="logo" style="font-size:2.5rem; margin-bottom:40px;">Quiz Master - PaÃ­ses e Capitais</div>
+            <div class="logo" style="font-size:2.5rem; margin-bottom:40px;">Quiz Master - Países e Capitais</div>
+
+
+            <!-- NÍVEIS -->
+            <div class="level-selector">
+                <span style="color:#94a3b8; font-weight:600; font-size:0.95rem;"></span>
+                <button class="level-btn active" data-level="basico">Básico</button>
+                <button class="level-btn" data-level="intermedio">Intermédio</button>
+                <button class="level-btn" data-level="avancado">Avançado</button>
+            </div>
+
+
             <p style="color:#94a3b8; margin-bottom:30px; font-size:0.95rem;">
-                Selecione um jogador da lista ou crie um novo.
+			<br>
+                Crie um novo jogador ou selecione um jogador da lista
             </p>
+
+
             <div class="player-form">
                 <input type="text" id="newPlayerInput" placeholder="Nome do novo jogador" />
                 <button class="btn btn-primary" id="createPlayerBtn">Criar Jogador</button>
@@ -25,7 +40,7 @@
             </div>
         </div>
 
-        <!-- ========== ECRÃƒ DE JOGO ========== -->
+        <!-- ========== ECRÃ DE JOGO ========== -->
         <div id="gameScreen" style="display:none;">
 
             <div class="top-bar">
@@ -36,9 +51,9 @@
             </div>
 
             <!-- Pergunta -->
-            <div class="question-box" id="questionDisplay">â€”</div>
+            <div class="question-box" id="questionDisplay">—</div>
 
-            <!-- OpÃ§Ãµes (4 botÃµes) -->
+            <!-- Opções (4 botões) -->
             <div class="options-grid" id="optionsGrid">
                 <button class="option-btn" data-index="0">A. ...</button>
                 <button class="option-btn" data-index="1">B. ...</button>
@@ -47,13 +62,13 @@
             </div>
 
             <div class="action-area">
-                <button class="btn btn-warning" id="hintBtn">ðŸ” Dica (eliminar opÃ§Ã£o)</button>
-                <button class="btn btn-danger" id="resetBtn" disabled>ðŸ”„ Nova Pergunta</button>
+                <button class="btn btn-warning" id="hintBtn">🔍 Dica (eliminar opção)</button>
+                <button class="btn btn-danger" id="resetBtn" disabled>🔄 Nova Pergunta</button>
             </div>
 
             <div style="margin-top:16px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
-                    <span style="color:#94a3b8; font-size:0.9rem;">âœ… Progresso</span>
+                    <span style="color:#94a3b8; font-size:0.9rem;">✅ Progresso</span>
                     <span style="color:#94a3b8; font-size:0.9rem;" id="progressDisplay">0/0</span>
                 </div>
                 <div style="width:100%; height:8px; background:rgba(255,255,255,0.1); border-radius:20px; overflow:hidden; margin-top:4px;">
@@ -62,13 +77,13 @@
             </div>
         </div>
 
-        <!-- ========== ECRÃƒ DE JOGO COMPLETO ========== -->
+        <!-- ========== ECRÃ DE JOGO COMPLETO ========== -->
         <div id="completeScreen" style="display:none; padding:40px 0;">
-            <div style="font-size:4rem; margin-bottom:20px;">ðŸŽ‰</div>
-            <div class="logo" style="font-size:2rem; margin-bottom:10px;">ParabÃ©ns!</div>
-            <p style="color:#94a3b8; font-size:1.2rem;">Completaste todas as perguntas disponÃ­veis!</p>
-            <p style="color:#94a3b8; margin:10px 0 20px;">Podes recomeÃ§ar o teu progresso.</p>
-            <button class="btn btn-primary" id="resetProgressBtn">ðŸ”„ RecomeÃ§ar Progresso</button>
+            <div style="font-size:4rem; margin-bottom:20px;">🎉</div>
+            <div class="logo" style="font-size:2rem; margin-bottom:10px;">Parabéns!</div>
+            <p style="color:#94a3b8; font-size:1.2rem;">Completaste todas as perguntas disponíveis deste nível!</p>
+            <p style="color:#94a3b8; margin:10px 0 20px;">Podes recomeçar o teu progresso neste nível.</p>
+            <button class="btn btn-primary" id="resetProgressBtn">🔄 Recomeçar Progresso</button>
             <button class="btn btn-secondary" id="logoutCompleteBtn" style="margin-left:12px;">Sair</button>
         </div>
 
@@ -91,7 +106,7 @@
         const db = firebase.firestore();
     </script>
 
-    <script src="paises.js?v=v20260819151632"></script>
-    <script src="script.js?v=v20260819151632"></script>
+    <script src="paises.js?v=1"></script>
+    <script src="script.js?v=1"></script>
 </body>
 </html>
